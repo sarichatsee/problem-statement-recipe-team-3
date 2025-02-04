@@ -1,25 +1,35 @@
 import { useState } from 'react'
 import { useRecipesContext } from '../hooks/useRecipesContext'
+import { useAuthContext } from '../hooks/useAuthContext'
 
 const RecipeForm = () => {
   const { dispatch } = useRecipesContext()
+  const { user } = useAuthContext()
+  
   const [name, setName] = useState('')
   const [ingredients, setIngredients] = useState('')
   const [instructions, setInstructions] = useState('')
   const [prepTime, setPrepTime] = useState('')
   const [difficulty, setDifficulty] = useState('easy')
+  const [imageUrl, setImageUrl] = useState('')
   const [error, setError] = useState(null)
   const [emptyFields, setEmptyFields] = useState([])
 
   const handleSubmit = async (e) => {
     e.preventDefault()
 
+    if (!user) {
+      setError('You must be logged in')
+      return
+    }
+
     const recipe = {
       name,
       ingredients: ingredients.split(',').map(item => item.trim()),
       instructions,
-      prepTime,
-      difficulty
+      prepTime: parseInt(prepTime),
+      difficulty,
+      imageUrl
     }
 
     const response = await fetch('/api/recipes', {
@@ -27,7 +37,7 @@ const RecipeForm = () => {
       body: JSON.stringify(recipe),
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${localStorage.getItem('token')}`
+        'Authorization': `Bearer ${user.token}`
       }
     })
     const json = await response.json()
@@ -44,6 +54,7 @@ const RecipeForm = () => {
       setInstructions('')
       setPrepTime('')
       setDifficulty('easy')
+      setImageUrl('')
       dispatch({type: 'CREATE_RECIPE', payload: json})
     }
   }
@@ -91,6 +102,13 @@ const RecipeForm = () => {
         <option value="medium">Medium</option>
         <option value="hard">Hard</option>
       </select>
+
+      <label>Image URL (optional):</label>
+      <input
+        type="text"
+        onChange={(e) => setImageUrl(e.target.value)}
+        value={imageUrl}
+      />
 
       <button>Add Recipe</button>
       {error && <div className="error">{error}</div>}
