@@ -25,6 +25,7 @@ const Navbar = () => {
           )}
           {!user && (
             <div>
+              <Link to="/chatbot">Food Analysis</Link>
               <Link to="/login">Login</Link>
               <Link to="/signup">Signup</Link>
             </div>

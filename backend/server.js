@@ -5,6 +5,7 @@ const dotenv = require("dotenv");
 const cors = require("cors");
 const authRoutes = require("./routes/authRoutes");
 const recipeRoutes = require("./routes/recipeRoutes");
+const foodAnalysisRoutes = require('./routes/foodAnalysisRoutes');
 
 dotenv.config();
 
@@ -20,6 +21,7 @@ app.get('/', (req, res) => {
 // Routes
 app.use("/api/auth", authRoutes);
 app.use("/api/recipes", recipeRoutes);
+app.use("/api/food", foodAnalysisRoutes);
 
 const PORT = process.env.PORT || 4000;
 mongoose
