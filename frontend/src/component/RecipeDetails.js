@@ -1,9 +1,10 @@
-import { useRecipesContext } from '../hooks/useRecipesContext'
+import { useState } from 'react'
 import { useAuthContext } from '../hooks/useAuthContext'
 import formatDistanceToNow from 'date-fns/formatDistanceToNow'
+import RecipeUpdateForm from './RecipeUpdateForm'
 
-const RecipeDetails = ({ recipe }) => {
-  const { dispatch } = useRecipesContext()
+const RecipeDetails = ({ recipe, onDelete, onUpdate }) => {
+  const [isEditing, setIsEditing] = useState(false)
   const { user } = useAuthContext()
 
   const handleDelete = async () => {
@@ -17,35 +18,61 @@ const RecipeDetails = ({ recipe }) => {
         'Authorization': `Bearer ${user.token}`
       }
     })
-    const json = await response.json()
 
     if (response.ok) {
-      dispatch({type: 'DELETE_RECIPE', payload: json})
+      onDelete(recipe._id)
     }
   }
 
   return (
     <div className="recipe-details">
-      {recipe.imageUrl && <img src={recipe.imageUrl} alt={recipe.name} />}
-      <h4>{recipe.name}</h4>
-      <div className="ingredients">
-        <strong>Ingredients:</strong>
-        <ul>
-          {recipe.ingredients.map((ingredient, index) => (
-            <li key={index}>{ingredient}</li>
-          ))}
-        </ul>
-      </div>
-      <div className="instructions">
-        <strong>Instructions:</strong>
-        <p>{recipe.instructions}</p>
-      </div>
-      <div className="recipe-info">
-        <p><strong>Preparation Time:</strong> {recipe.prepTime} minutes</p>
-        <p><strong>Difficulty:</strong> {recipe.difficulty}</p>
-        <p>{formatDistanceToNow(new Date(recipe.createdAt), { addSuffix: true })}</p>
-      </div>
-      <span className="material-symbols-outlined" onClick={handleDelete}>delete</span>
+      {isEditing ? (
+        <RecipeUpdateForm 
+          recipe={recipe} 
+          setIsEditing={setIsEditing}
+          onUpdate={onUpdate}
+        />
+      ) : (
+        <>
+          {recipe.imageUrl && (
+            <div className="recipe-image">
+              <img src={recipe.imageUrl} alt={recipe.name} />
+            </div>
+          )}
+          <h4>{recipe.name}</h4>
+          <div className="ingredients">
+            <strong>Ingredients:</strong>
+            <ul>
+              {recipe.ingredients.map((ingredient, index) => (
+                <li key={index}>{ingredient}</li>
+              ))}
+            </ul>
+          </div>
+          <div className="instructions">
+            <strong>Instructions:</strong>
+            <p>{recipe.instructions}</p>
+          </div>
+          <div className="recipe-info">
+            <p><strong>Preparation Time:</strong> {recipe.prepTime} minutes</p>
+            <p><strong>Difficulty:</strong> {recipe.difficulty}</p>
+            <p>{formatDistanceToNow(new Date(recipe.createdAt), { addSuffix: true })}</p>
+          </div>
+          <div className="recipe-actions">
+            <span 
+              className="material-symbols-outlined" 
+              onClick={() => setIsEditing(true)}
+            >
+              edit
+            </span>
+            <span 
+              className="material-symbols-outlined" 
+              onClick={handleDelete}
+            >
+              delete
+            </span>
+          </div>
+        </>
+      )}
     </div>
   )
 }
