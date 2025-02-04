@@ -1,0 +1,22 @@
+{
+  "proxy": "http://localhost:4000",
+  "name": "frontend",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "@testing-library/jest-dom": "^6.6.3",
+    "@testing-library/react": "^16.2.0",
+    "@testing-library/user-event": "^14.6.1",
+    "date-fns": "^4.1.0",
+    "dotenv": "^16.4.7",
+    "react-router-dom": "^7.1.5",
+    "web-vitals": "^4.2.4"
+  }
+}
