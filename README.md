@@ -23,7 +23,7 @@ Allocation of Tasks
     • Upon submission, the recipe details should be sent to the backend API and 
     stored in the MongoDB Atlas cloud database.
 
-2. Display All Recipes
+2. Display All Recipes [JOHNSON]
     • Implement a home page that retrieves all recipes from the MongoDB database 
     using the backend API.
     • Dynamically render the list of recipes on the home page with details such as 
