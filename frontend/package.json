@@ -4,7 +4,8 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "react-scripts start"
   },
   "keywords": [],
   "author": "",
@@ -17,6 +18,7 @@
     "date-fns": "^4.1.0",
     "dotenv": "^16.4.7",
     "react-router-dom": "^7.1.5",
+    "react-scripts": "^5.0.1",
     "web-vitals": "^4.2.4"
   }
 }
