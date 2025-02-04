@@ -35,7 +35,7 @@ Allocation of Tasks
     from the database.
     • Update the UI to reflect the deletion without requiring a page refresh.
 
-4. Update a Recipe
+4. Update a Recipe     
     • Provide an update feature in the frontend, allowing users to modify the details of 
     an existing recipe. The update functionality should send a PATCH request to the 
     backend API and dynamically reflect the changes in the UI.
@@ -69,7 +69,7 @@ Allocation of Tasks
     • Set up a collection for recipes with appropriate fields (e.g., name, ingredients, 
     instructions, preparation time, difficulty level).
 
-8. Styling and Responsiveness
+8. Styling and Responsiveness       [SARICHA]
     • Design a clean, user-friendly interface for the application using React.
     • Ensure the app is responsive and works well across various devices.
 
