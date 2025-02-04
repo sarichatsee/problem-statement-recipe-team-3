@@ -1,33 +1,42 @@
-const express = require("express");
-const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
-const User = require("../models/User");
+import { useState } from "react";
+import { useAuthContext} from "./useAuthContext";
 
-const router = express.Router();
+export const useLogin = () => {
+    const [error, setError] = useState(null);
+    const [isLoading, setIsLoading] = useState(null);
+    const { dispatch } = useAuthContext();
 
-// Login Route
-router.post("/api/login", async (req, res) => {
-  try {
-    const { email, password } = req.body;
-    if (!email || !password) {
-      return res.status(400).json({ error: "Email and password are required" });
+    const login = async (email, password) => {
+        setIsLoading(true);
+        setError(null);
+
+        const response = await fetch({
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json'
+            },
+
+            body: JSON.stringify({email, password})
+        });
+
+        const json = await response.json();
+
+        if (!response.ok) {
+            setError(json.error);
+            setIsLoading(false);
+        }
+
+        if (response.ok) {
+            localStorage.setItem("user", JSON.stringify(json));
+
+            dispatch({
+                type: "LOGIN",
+                payload: json
+            });
+
+            setIsLoading(false);
+        }
     }
 
-    const user = await User.findOne({ email });
-    if (!user) {
-      return res.status(400).json({ error: "Invalid credentials" });
-    }
-
-    const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) {
-      return res.status(400).json({ error: "Invalid credentials" });
-    }
-
-    const token = jwt.sign({ _id: user._id }, process.env.SECRET, { expiresIn: "1h" });
-    res.status(200).json({ token, message: "Login successful" });
-  } catch (error) {
-    res.status(500).json({ error: "Server error", details: error.message });
-  }
-});
-
-module.exports = router;
+    return { login, error, isLoading };
+}
