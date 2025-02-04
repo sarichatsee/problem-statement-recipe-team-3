@@ -35,7 +35,7 @@ Allocation of Tasks
     from the database.
     • Update the UI to reflect the deletion without requiring a page refresh.
 
-4. Update a Recipe     
+4. Update a Recipe     [LUNA]
     • Provide an update feature in the frontend, allowing users to modify the details of 
     an existing recipe. The update functionality should send a PATCH request to the 
     backend API and dynamically reflect the changes in the UI.
