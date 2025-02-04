@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import RecipeDetails from "../components/RecipeDetails";
-import RecipeForm from "../components/RecipeForm";
+import RecipeDetails from '../component/RecipeDetails';
+import RecipeForm from '../component/RecipeForm';
 import { useRecipeContext } from "../hooks/useRecipeContext";
 import { useAuthContext } from "../hooks/useAuthContext";
 
