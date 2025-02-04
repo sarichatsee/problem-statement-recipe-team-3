@@ -1,14 +1,20 @@
-const express = require("express");
+import { useAuthContext } from "./useAuthContext";
+import { useRecipeContext } from "./useRecipeContext";
 
-const router = express.Router();
+export const useLogout = () => {
 
-// Logout Route
-router.post("/api/logout", (req, res) => {
-  try {
-    res.status(200).json({ message: "Logout successful" });
-  } catch (error) {
-    res.status(500).json({ error: "Server error", details: error.message });
+  const { dispatch} = useAuthContext();
+  const { dispatch: recipeDispatch } = useRecipeContext();
+
+  const logout = () => {
+    localStorage.removeItem('user');
+
+    dispatch({
+      type: 'LOGOUT'
+    });
+
+    recipeDispatch({ type: 'SET_RECIPES', payload: null });
   }
-});
 
-module.exports = router;
+  return { logout };
+}

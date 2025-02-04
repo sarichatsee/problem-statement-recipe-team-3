@@ -23,7 +23,7 @@ Allocation of Tasks
     • Upon submission, the recipe details should be sent to the backend API and 
     stored in the MongoDB Atlas cloud database.
 
-2. Display All Recipes
+2. Display All Recipes [JOHNSON]
     • Implement a home page that retrieves all recipes from the MongoDB database 
     using the backend API.
     • Dynamically render the list of recipes on the home page with details such as 
@@ -35,7 +35,7 @@ Allocation of Tasks
     from the database.
     • Update the UI to reflect the deletion without requiring a page refresh.
 
-4. Update a Recipe     
+4. Update a Recipe     [LUNA]
     • Provide an update feature in the frontend, allowing users to modify the details of 
     an existing recipe. The update functionality should send a PATCH request to the 
     backend API and dynamically reflect the changes in the UI.
