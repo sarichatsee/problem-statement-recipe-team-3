@@ -1,10 +1,10 @@
 import { useAuthContext } from "./useAuthContext";
-import { useRecipeContext } from "./useRecipeContext";
+import { useRecipesContext } from "./useRecipesContext";
 
 export const useLogout = () => {
 
   const { dispatch} = useAuthContext();
-  const { dispatch: recipeDispatch } = useRecipeContext();
+  const { dispatch: recipeDispatch } = useRecipesContext();
 
   const logout = () => {
     localStorage.removeItem('user');
