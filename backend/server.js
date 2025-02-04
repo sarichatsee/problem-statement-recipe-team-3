@@ -12,6 +12,11 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
+// Handle GET requests to the root URL
+app.get('/', (req, res) => {
+    res.send('Hello from the server!');
+});
+
 // Routes
 app.use("/api/auth", authRoutes);
 app.use("/api/recipes", recipeRoutes);
