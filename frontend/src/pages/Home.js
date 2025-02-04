@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 import RecipeDetails from '../component/RecipeDetails';
 import RecipeForm from '../component/RecipeForm';
-import { useRecipeContext } from "../hooks/useRecipeContext";
+import { useRecipesContext } from "../hooks/useRecipesContext";
 import { useAuthContext } from "../hooks/useAuthContext";
 
 function Home() {
-  const { recipes, dispatch } = useRecipeContext(); // global context state
+  const { recipes, dispatch } = useRecipesContext(); // global context state
   const { user } = useAuthContext();
   const [searchTerm, setSearchTerm] = useState(""); // State for search filter
 
