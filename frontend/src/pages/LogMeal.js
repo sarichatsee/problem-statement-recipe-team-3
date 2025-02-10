@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 
+const API_KEY = '4db13b7f84518e1a07e0ffb1022bb87fb6a094f6';
+
 const LogMeal = () => {
     const [image, setImage] = useState(null);
     const [results, setResults] = useState(null);
@@ -27,19 +29,17 @@ const LogMeal = () => {
             const segmentationResponse = await fetch('https://api.logmeal.es/v2/image/segmentation/complete', {
                 method: 'POST',
                 headers: {
-                    'Authorization': `Bearer ${process.env.REACT_APP_LOGMEAL_API_KEY}`
+                    'Authorization': `Bearer ${API_KEY}`
                 },
                 body: formData
             });
 
             if (!segmentationResponse.ok) {
                 const errorDetail = await segmentationResponse.json();
-                console.error("Segmentation Error Detail:", errorDetail);
                 throw new Error(`Failed to segment image: ${errorDetail.message || 'No detailed error provided by API'}`);
             }
 
             const segmentationData = await segmentationResponse.json();
-            console.log("Successful Segmentation Response:", segmentationData);
 
             if (!segmentationData.imageId) {
                 throw new Error("No imageId returned, which is necessary for further processing.");
@@ -50,19 +50,17 @@ const LogMeal = () => {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${process.env.REACT_APP_LOGMEAL_API_KEY}`
+                    'Authorization': `Bearer ${API_KEY}`
                 },
                 body: JSON.stringify({ imageId: segmentationData.imageId })
             });
 
             if (!nutritionResponse.ok) {
                 const nutritionErrorDetail = await nutritionResponse.json();
-                console.error("Nutrition Info Error Detail:", nutritionErrorDetail);
                 throw new Error(`Failed to retrieve nutritional information: ${nutritionErrorDetail.message || 'No detailed error provided by API'}`);
             }
 
             const nutritionData = await nutritionResponse.json();
-            console.log("Nutritional Info Response:", nutritionData);
 
             // Combine food recognition and nutritional info
             setResults({
