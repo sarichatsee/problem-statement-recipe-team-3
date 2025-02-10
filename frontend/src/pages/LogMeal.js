@@ -1,5 +1,8 @@
 import React, { useState } from 'react';
 
+// Centralize API Key management
+const API_KEY = '60942d698fedd68ffda2975966e26ac720c0a3cd';
+
 const LogMeal = () => {
     const [image, setImage] = useState(null);
     const [results, setResults] = useState(null);
@@ -23,13 +26,16 @@ const LogMeal = () => {
         formData.append('image', image);
 
         try {
+            // Headers object with centralized API key
+            const headers = {
+                'Authorization': `Bearer ${API_KEY}`
+            };
+
             // Post the image for segmentation to detect food composition
             const segmentationResponse = await fetch('https://api.logmeal.com/v2/image/segmentation/complete', {
                 method: 'POST',
                 body: formData,
-                headers: {
-                    'Authorization': 'Bearer 60942d698fedd68ffda2975966e26ac720c0a3cd' 
-                }
+                headers
             });
             const segmentationData = await segmentationResponse.json();
 
@@ -41,8 +47,8 @@ const LogMeal = () => {
             const nutritionResponse = await fetch('https://api.logmeal.com/v2/recipe/nutritionalInfo', {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': 'Bearer 60942d698fedd68ffda2975966e26ac720c0a3cd'
+                    ...headers,
+                    'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({ imageId: segmentationData.imageId })
             });
