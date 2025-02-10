@@ -9,7 +9,7 @@ const NutritionalAnalysis = () => {
         e.preventDefault();
         if (!file) return alert('Please select an image first.');
 
-        const apiUserToken = 'fb3afd4cbdef7975026eeafac73a860b82477765';
+        const apiUserToken = 'a81f334445d7ccec304c92d2bc07741c599fa6f8';
         const headers = { 'Authorization': `Bearer ${apiUserToken}` };
         const formData = new FormData();
         formData.append('image', file);
