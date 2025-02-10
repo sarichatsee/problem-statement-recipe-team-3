@@ -37,10 +37,16 @@ const LogMeal = () => {
                 body: formData,
                 headers
             });
+
+            if (!segmentationResponse.ok) {
+                const errorDetail = await segmentationResponse.json();
+                throw new Error(`Failed to segment image: ${errorDetail.message}`);
+            }
+
             const segmentationData = await segmentationResponse.json();
 
             if (!segmentationData.imageId) {
-                throw new Error('Failed to segment image.');
+                throw new Error('Segmentation failed: No image ID returned');
             }
 
             // Fetch the nutritional information based on the detected image ID
@@ -52,10 +58,17 @@ const LogMeal = () => {
                 },
                 body: JSON.stringify({ imageId: segmentationData.imageId })
             });
+
+            if (!nutritionResponse.ok) {
+                const errorDetail = await nutritionResponse.json();
+                throw new Error(`Failed to retrieve nutritional info: ${errorDetail.message}`);
+            }
+
             const nutritionData = await nutritionResponse.json();
 
             setResults(nutritionData);
         } catch (error) {
+            console.error('Error:', error);
             setError(error.message);
         } finally {
             setLoading(false);
