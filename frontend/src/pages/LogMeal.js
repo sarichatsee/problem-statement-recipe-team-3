@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
 // Centralize API Key management
-const API_KEY = '60942d698fedd68ffda2975966e26ac720c0a3cd';
+const API_KEY = 'bf73d6850eaccfe153c24006a3fe989da6fb2b23';
 
 const LogMeal = () => {
     const [image, setImage] = useState(null);
