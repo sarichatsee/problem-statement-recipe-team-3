@@ -30,26 +30,26 @@ function Home() {
     }
   }, [dispatch, user]);
 
- // Filter recipes based on search term
+  // Filter recipes based on search term
   const filteredRecipes = recipes
     ? recipes.filter((recipe) =>
-        recipe.name.toLowerCase().includes(searchTerm.toLowerCase())
-      )
+      recipe.name.toLowerCase().includes(searchTerm.toLowerCase())
+    )
     : [];
 
   return (
     <div className="home">
       {/* Search Bar */}
-    <div className="recipes">
-      <input
-        type="text"
-        placeholder="Search recipes..."
-        value={searchTerm}
-        onChange={(e) => setSearchTerm(e.target.value)}
-        className="search-bar"
-      />
+      <div className="recipes">
+        <input
+          type="text"
+          placeholder="Search recipes..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          className="search-bar"
+        />
 
-   
+
         {filteredRecipes.length > 0 ? (
           filteredRecipes.map((recipe) => (
             <RecipeDetails key={recipe._id} recipe={recipe} />
@@ -57,8 +57,8 @@ function Home() {
         ) : (
           <p>No recipes found</p>
         )}
-      
-        </div>
+
+      </div>
       <RecipeForm />
     </div>
   );
