@@ -33,8 +33,12 @@ const LogMeal = () => {
             });
 
             const segmentationData = await segmentationResponse.json();
-            if (!segmentationResponse.ok || !segmentationData.imageId) {
-                throw new Error(segmentationData.error || "Food recognition failed or no imageId returned");
+            if (!segmentationResponse.ok) {
+                throw new Error(`Segmentation failed: ${segmentationData.message || 'No specific error message'}`);
+            }
+
+            if (!segmentationData.imageId) {
+                throw new Error("No imageId returned, which is necessary for further processing.");
             }
 
             // Step 2: Fetch nutritional information using the imageId
@@ -49,7 +53,7 @@ const LogMeal = () => {
 
             const nutritionData = await nutritionResponse.json();
             if (!nutritionResponse.ok) {
-                throw new Error(nutritionData.error || "Failed to retrieve nutritional information");
+                throw new Error(`Failed to retrieve nutritional information: ${nutritionData.message || 'No specific error message'}`);
             }
 
             // Combine food recognition and nutritional info
@@ -84,9 +88,9 @@ const LogMeal = () => {
                     <h3>Segmentation Data:</h3>
                     <pre>{JSON.stringify(results.recognition, null, 2)}</pre>
                     <h3>Nutritional Information:</h3>
-                    {results.nutrition && results.nutrition.hasNutritionalInfo && (
+                    {results.nutrition && (
                         <div>
-                            <p><strong>Calories:</strong> {results.nutrition.nutritional_info.calories.toFixed(2)} kcal</p>
+                            <p><strong>Calories:</strong> {results.nutrition.nutritional_info?.calories?.toFixed(2)} kcal</p>
                             <p><strong>Serving Size:</strong> {results.nutrition.serving_size}g</p>
                         </div>
                     )}
