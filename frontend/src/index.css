@@ -3,131 +3,181 @@
 
 /* layout */
 :root {
-    --primary: #f280ff;
-    --error: #e71919;
-  }
-  body {
-    background: #f1f1f1;
-    margin: 0;
-    font-family: "Nunito";
-  }
-  header {
-    background: #fff;
-  }
-  header .container {
-    max-width: 1400px;
-    margin: 0 auto;
-    padding: 10px 20px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-  header a {
-    color: #333;
-    text-decoration: none;
-  }
-  .pages{
-    max-width: 1400px;
-    padding: 20px;
-    margin: 0 auto;
-  }
-  
-  /* homepage */
-  .home {
-    display: grid;
-    grid-template-columns: 3fr 1fr;
-    gap: 100px;
-  }
-  .recipe-details {
-    background: #fff;
-    border-radius: 4px;
-    margin: 20px auto;
-    padding: 20px;
-    position: relative;
-    box-shadow: 2px 2px 5px rgba(0,0,0,0.05);
-  }
-  .recipe-details h4 {
-    margin: 0 0 10px 0;
-    font-size: 1.2em;
-    color: var(--primary);
-  }
-  .recipe-details p {
-    margin: 0;
-    font-size: 0.9em;
-    color: #555;
-  }
-  .recipe-details span {
-    position: absolute;
-    top: 20px;
-    right: 20px;
-    cursor: pointer;
-    background: #f1f1f1;
-    padding: 6px;
-    border-radius: 50%;
-    color: #333;
-  }
-  
-  /* new recipe form */
-  label, input {
-    display: block;
-  }
-  input {
-    padding: 10px;
-    margin-top: 10px;
-    margin-bottom: 20px;
-    width: 100%;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    box-sizing: border-box;
-  }
-  form button {
-    background: var(--primary);
-    border: 0;
-    color: #fff;
-    padding: 10px;
-    font-family: "Poppins";
-    border-radius: 4px;
-    cursor: pointer;
-  }
-  div.error {
-    padding: 10px;
-    background: #ffefef;
-    border: 1px solid var(--error);
-    color: var(--error);
-    border-radius: 4px;
-    margin: 20px 0;
-  }
-  input.error {
-    border: 1px solid var(--error);
-  }
-  
-  /* navbar */
-  nav {
-    display: flex;
-    align-items: center;
-  }
-  
-  nav a {
-    margin-left: 10px;
-  }
-  
-  nav button {
-    background: #fff;
-    color: var(--primary);
-    border: 2px solid var(--primary);
-    padding: 6px 10px;
-    border-radius: 4px;
-    font-family: "Poppins";
-    cursor: pointer;
-    font-size: 1em;
-    margin-left: 10px;
-  }
-  
-  /* auth forms */
-  form.signup, form.login {
-    max-width: 400px;
-    margin: 40px auto;
-    padding: 20px;
-    background: #fff;
-    border-radius: 4px;
-  }
+  --primary: #f280ff;
+  --error: #e71919;
+}
+
+body {
+  background: #f1f1f1;
+  margin: 0;
+  font-family: "Nunito";
+}
+
+header {
+  background: #fff;
+}
+
+header .container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 10px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+header a {
+  color: #333;
+  text-decoration: none;
+}
+
+.pages {
+  max-width: 1400px;
+  padding: 20px;
+  margin: 0 auto;
+}
+
+
+/* homepage */
+.home {
+  display: grid;
+  grid-template-columns: 3fr 1fr;
+  gap: 100px;
+}
+
+.recipe-details {
+  background: #fff;
+  border-radius: 4px;
+  margin: 20px auto;
+  padding: 20px;
+  position: relative;
+  /* Keeps it positioned relative to its normal position */
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.05);
+  display: flex;
+  /* Use flexbox for layout */
+  flex-direction: column;
+  /* Stack children vertically */
+}
+
+.recipe-image {
+  align-self: center; /* Center image within the container */
+  max-width: 100%; /* Ensure it doesn't overflow the recipe card */
+  margin-bottom: 10px; /* Space between the image and text */
+}
+
+.recipe-image img {
+  max-height: 300px; /* Limit image height */
+  width: auto; /* Maintain aspect ratio */
+}
+
+.recipe-details h4 {
+  margin: 0 0 10px 0;
+  font-size: 1.2em;
+  color: var(--primary);
+}
+
+.recipe-details p {
+  margin: 0;
+  font-size: 0.9em;
+  color: #555;
+}
+
+.recipe-details span {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  cursor: pointer;
+  background: #f1f1f1;
+  padding: 6px;
+  border-radius: 50%;
+  color: #333;
+}
+
+/* new recipe form */
+label,
+input {
+  display: block;
+}
+
+input {
+  padding: 10px;
+  margin-top: 10px;
+  margin-bottom: 20px;
+  width: 100%;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+form button {
+  background: var(--primary);
+  border: 0;
+  color: #fff;
+  padding: 10px;
+  font-family: "Poppins";
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.button-group button {
+  margin-right: 10px; /* Adds space to the right of every button */
+}
+
+.button-group button:last-child {
+  margin-right: 0; /* Removes margin from the right of the last button */
+}
+
+.cancel-btn {
+  margin-left: 20px; /* Specifically adds more space to the left of the Cancel button */
+}
+
+
+div.error {
+  padding: 10px;
+  background: #ffefef;
+  border: 1px solid var(--error);
+  color: var(--error);
+  border-radius: 4px;
+  margin: 20px 0;
+}
+
+input.error {
+  border: 1px solid var(--error);
+}
+
+.action-icon:hover {
+  color: #ff0000;
+}
+
+
+/* navbar */
+nav {
+  display: flex;
+  align-items: center;
+}
+
+nav a {
+  margin-left: 10px;
+}
+
+nav button {
+  background: #fff;
+  color: var(--primary);
+  border: 2px solid var(--primary);
+  padding: 6px 10px;
+  border-radius: 4px;
+  font-family: "Poppins";
+  cursor: pointer;
+  font-size: 1em;
+  margin-left: 10px;
+}
+
+/* auth forms */
+form.signup,
+form.login {
+  max-width: 400px;
+  margin: 40px auto;
+  padding: 20px;
+  background: #fff;
+  border-radius: 4px;
+}

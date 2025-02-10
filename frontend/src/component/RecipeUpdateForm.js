@@ -1,24 +1,24 @@
-import { useState } from 'react'
-import { useAuthContext } from '../hooks/useAuthContext'
+import { useState } from 'react';
+import { useAuthContext } from '../hooks/useAuthContext';
 
 const RecipeUpdateForm = ({ recipe, setIsEditing, onUpdate }) => {
-  const { user } = useAuthContext()
-  
-  const [name, setName] = useState(recipe.name)
-  const [ingredients, setIngredients] = useState(recipe.ingredients.join(', '))
-  const [instructions, setInstructions] = useState(recipe.instructions)
-  const [prepTime, setPrepTime] = useState(recipe.prepTime)
-  const [difficulty, setDifficulty] = useState(recipe.difficulty)
-  const [imageUrl, setImageUrl] = useState(recipe.imageUrl || '')
-  const [error, setError] = useState(null)
-  const [emptyFields, setEmptyFields] = useState([])
+  const { user } = useAuthContext();
+
+  const [name, setName] = useState(recipe.name);
+  const [ingredients, setIngredients] = useState(recipe.ingredients.join(', '));
+  const [instructions, setInstructions] = useState(recipe.instructions);
+  const [prepTime, setPrepTime] = useState(recipe.prepTime);
+  const [difficulty, setDifficulty] = useState(recipe.difficulty);
+  const [imageUrl, setImageUrl] = useState(recipe.imageUrl || '');
+  const [error, setError] = useState(null);
+  const [emptyFields, setEmptyFields] = useState([]);
 
   const handleSubmit = async (e) => {
-    e.preventDefault()
+    e.preventDefault();
 
     if (!user) {
-      setError('You must be logged in')
-      return
+      setError('You must be logged in');
+      return;
     }
 
     const updatedRecipe = {
@@ -29,7 +29,7 @@ const RecipeUpdateForm = ({ recipe, setIsEditing, onUpdate }) => {
       difficulty,
       imageUrl,
       userId: user._id
-    }
+    };
 
     const response = await fetch('/api/recipes/' + recipe._id, {
       method: 'PATCH',
@@ -38,19 +38,19 @@ const RecipeUpdateForm = ({ recipe, setIsEditing, onUpdate }) => {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${user.token}`
       }
-    })
-    const json = await response.json()
+    });
 
     if (!response.ok) {
-      setError(json.error)
-      setEmptyFields(json.emptyFields || [])
+      const json = await response.json();
+      setError(json.error);
+      setEmptyFields(json.emptyFields || []);
     } else {
-      setError(null)
-      setEmptyFields([])
-      onUpdate(json)
-      setIsEditing(false)
+      setError(null);
+      setEmptyFields([]);
+      onUpdate(updatedRecipe);
+      setIsEditing(false);
     }
-  }
+  };
 
   return (
     <form className="update-form" onSubmit={handleSubmit}>
@@ -105,17 +105,13 @@ const RecipeUpdateForm = ({ recipe, setIsEditing, onUpdate }) => {
 
       <div className="button-group">
         <button type="submit">Save Changes</button>
-        <button 
-          type="button" 
-          onClick={() => setIsEditing(false)}
-          className="cancel-btn"
-        >
+        <button type="button" onClick={() => setIsEditing(false)} className="cancel-btn">
           Cancel
         </button>
       </div>
       {error && <div className="error">{error}</div>}
     </form>
-  )
+  );
 }
 
-export default RecipeUpdateForm
+export default RecipeUpdateForm;
