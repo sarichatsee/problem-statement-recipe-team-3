@@ -28,7 +28,7 @@ const LogMeal = () => {
                 method: 'POST',
                 body: formData,
                 headers: {
-                    'Authorization': 'Bearer 60942d698fedd68ffda2975966e26ac720c0a3cd' // Replace YOUR_API_KEY with your actual API key
+                    'Authorization': 'Bearer 60942d698fedd68ffda2975966e26ac720c0a3cd' 
                 }
             });
             const segmentationData = await segmentationResponse.json();
@@ -42,7 +42,7 @@ const LogMeal = () => {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': 'Bearer YOUR_API_KEY'
+                    'Authorization': 'Bearer 60942d698fedd68ffda2975966e26ac720c0a3cd'
                 },
                 body: JSON.stringify({ imageId: segmentationData.imageId })
             });
