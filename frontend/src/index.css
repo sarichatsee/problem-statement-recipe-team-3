@@ -181,3 +181,109 @@ form.login {
   background: #fff;
   border-radius: 4px;
 }
+
+/* LogMeal page styling */
+.log-meal {
+  max-width: 800px;
+  margin: 20px auto;
+  padding: 20px;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  font-family: "Nunito", sans-serif;
+}
+
+.log-meal h2 {
+  color: var(--primary);
+  text-align: center;
+}
+
+.log-meal form {
+  margin-top: 20px;
+  text-align: center;
+}
+
+.log-meal input[type="file"] {
+  border: 2px solid var(--primary);
+  padding: 8px;
+  margin-top: 10px;
+  margin-bottom: 20px;
+  display: block;
+  width: calc(100% - 20px); /* Adjusts width to account for padding */
+  cursor: pointer;
+}
+
+.log-meal button {
+  background: var(--primary);
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+  display: block;
+  margin: 10px auto;
+}
+
+.error {
+  color: var(--error);
+  background-color: #ffecec;
+  border-left: 5px solid var(--error);
+  padding: 10px;
+  margin: 10px 0;
+  border-radius: 4px;
+}
+
+.loading {
+  text-align: center;
+  font-size: 16px;
+  color: var(--primary);
+}
+
+/* Styling for the nutritional information display */
+.nutrition-info {
+  margin-top: 20px;
+  padding: 15px;
+  background: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.nutrition-info h3 {
+  color: var(--primary);
+  margin-bottom: 10px;
+}
+
+.nutrition-info p, .nutrition-info li {
+  font-size: 16px;
+  color: #666;
+  line-height: 1.5;
+}
+
+.nutrition-info ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.nutrition-info strong {
+  color: #333;
+}
+
+/* Enhancements for file input to make it visually consistent */
+.log-meal input[type="file"]::-webkit-file-upload-button {
+  background: var(--primary);
+  color: white;
+  padding: 10px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.log-meal input[type="file"]::file-selector-button {
+  background: var(--primary);
+  color: white;
+  padding: 10px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
