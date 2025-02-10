@@ -45,10 +45,6 @@ const LogMeal = () => {
 
             const segmentationData = await segmentationResponse.json();
 
-            if (!segmentationData.imageId) {
-                throw new Error('Segmentation failed: No image ID returned');
-            }
-
             // Fetch the nutritional information based on the detected image ID
             const nutritionResponse = await fetch('https://api.logmeal.com/v2/recipe/nutritionalInfo', {
                 method: 'POST',
