@@ -73,7 +73,7 @@ Allocation of Tasks
     • Design a clean, user-friendly interface for the application using React.
     • Ensure the app is responsive and works well across various devices.
 
-9. Hosting the Application
+9. Hosting the Application          [SARICHA]
     • Host the frontend and backend components of the application on platforms like 
     Render.
     • Provide live links to the hosted app for demonstration.
