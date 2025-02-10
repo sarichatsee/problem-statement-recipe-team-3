@@ -1,8 +1,5 @@
 import React, { useState } from 'react';
 
-// Centralize API Key management
-const API_KEY = 'bf73d6850eaccfe153c24006a3fe989da6fb2b23';
-
 const LogMeal = () => {
     const [image, setImage] = useState(null);
     const [results, setResults] = useState(null);
@@ -29,7 +26,7 @@ const LogMeal = () => {
             const segmentationResponse = await fetch('https://api.logmeal.com/v2/image/segmentation/complete', {
                 method: 'POST',
                 headers: {
-                    'Authorization': `Bearer ${API_KEY}`
+                    'Authorization': `Bearer ${process.env.REACT_APP_LOGMEAL_API_KEY}` // Corrected to use the environment variable
                 },
                 body: formData
             });
@@ -41,8 +38,6 @@ const LogMeal = () => {
 
             const segmentationData = await segmentationResponse.json();
 
-            // Assuming successful segmentation, you might want to do more with the result here.
-            // For now, we log it and display it in the UI.
             console.log("Segmentation Data:", segmentationData);
             setResults(segmentationData);
         } catch (error) {
