@@ -23,23 +23,41 @@ const LogMeal = () => {
         formData.append('image', image);
 
         try {
-            const segmentationResponse = await fetch('https://api.logmeal.com/v2/image/segmentation/complete', {
+            // Step 1: Detect food items using LogMeal API
+            const segmentationResponse = await fetch('https://api.logmeal.es/v2/image/segmentation/complete', {
                 method: 'POST',
                 headers: {
-                    'Authorization': `Bearer ${process.env.REACT_APP_LOGMEAL_API_KEY}` // Corrected to use the environment variable
+                    'Authorization': `Bearer ${process.env.REACT_APP_LOGMEAL_API_KEY}`
                 },
                 body: formData
             });
 
-            if (!segmentationResponse.ok) {
-                const errorDetail = await segmentationResponse.json();
-                throw new Error(`Failed to segment image: ${errorDetail.message}`);
+            const segmentationData = await segmentationResponse.json();
+            if (!segmentationResponse.ok || !segmentationData.imageId) {
+                throw new Error(segmentationData.error || "Food recognition failed or no imageId returned");
             }
 
-            const segmentationData = await segmentationResponse.json();
+            // Step 2: Fetch nutritional information using the imageId
+            const nutritionResponse = await fetch('https://api.logmeal.es/v2/recipe/nutritionalInfo', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${process.env.REACT_APP_LOGMEAL_API_KEY}`
+                },
+                body: JSON.stringify({ imageId: segmentationData.imageId })
+            });
 
-            console.log("Segmentation Data:", segmentationData);
-            setResults(segmentationData);
+            const nutritionData = await nutritionResponse.json();
+            if (!nutritionResponse.ok) {
+                throw new Error(nutritionData.error || "Failed to retrieve nutritional information");
+            }
+
+            // Combine food recognition and nutritional info
+            setResults({
+                recognition: segmentationData,
+                nutrition: nutritionData
+            });
+
         } catch (error) {
             console.error('Error:', error);
             setError(error.message);
@@ -64,7 +82,14 @@ const LogMeal = () => {
             {results && (
                 <div>
                     <h3>Segmentation Data:</h3>
-                    <pre>{JSON.stringify(results, null, 2)}</pre>
+                    <pre>{JSON.stringify(results.recognition, null, 2)}</pre>
+                    <h3>Nutritional Information:</h3>
+                    {results.nutrition && results.nutrition.hasNutritionalInfo && (
+                        <div>
+                            <p><strong>Calories:</strong> {results.nutrition.nutritional_info.calories.toFixed(2)} kcal</p>
+                            <p><strong>Serving Size:</strong> {results.nutrition.serving_size}g</p>
+                        </div>
+                    )}
                 </div>
             )}
         </div>
