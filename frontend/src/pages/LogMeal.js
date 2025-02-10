@@ -25,7 +25,6 @@ const LogMeal = () => {
         formData.append('image', image);
 
         try {
-            // Step 1: Detect food items using LogMeal API
             const segmentationResponse = await fetch('https://api.logmeal.es/v2/image/segmentation/complete', {
                 method: 'POST',
                 headers: {
@@ -41,11 +40,6 @@ const LogMeal = () => {
 
             const segmentationData = await segmentationResponse.json();
 
-            if (!segmentationData.imageId) {
-                throw new Error("No imageId returned, which is necessary for further processing.");
-            }
-
-            // Step 2: Fetch nutritional information using the imageId
             const nutritionResponse = await fetch('https://api.logmeal.es/v2/recipe/nutritionalInfo', {
                 method: 'POST',
                 headers: {
@@ -62,7 +56,6 @@ const LogMeal = () => {
 
             const nutritionData = await nutritionResponse.json();
 
-            // Combine food recognition and nutritional info
             setResults({
                 recognition: segmentationData,
                 nutrition: nutritionData
@@ -91,15 +84,18 @@ const LogMeal = () => {
 
             {results && (
                 <div>
-                    <h3>Segmentation Data:</h3>
-                    <pre>{JSON.stringify(results.recognition, null, 2)}</pre>
-                    <h3>Nutritional Information:</h3>
-                    {results.nutrition && (
-                        <div>
-                            <p><strong>Calories:</strong> {results.nutrition.nutritional_info.calories.toFixed(2)} kcal</p>
-                            <p><strong>Serving Size:</strong> {results.nutrition.serving_size}g</p>
+                    <h3>Meal Analysis:</h3>
+                    {results.recognition.foodFamily.map(food => (
+                        <div key={food.id}>
+                            <p><strong>Food Type:</strong> {food.name}</p>
+                            <p><strong>Confidence:</strong> {(food.prob * 100).toFixed(2)}%</p>
                         </div>
-                    )}
+                    ))}
+                    <h3>Nutritional Information:</h3>
+                    <div>
+                        <p><strong>Calories:</strong> {results.nutrition.nutritional_info.calories.toFixed(2)} kcal</p>
+                        <p><strong>Serving Size:</strong> {results.nutrition.serving_size}g</p>
+                    </div>
                 </div>
             )}
         </div>

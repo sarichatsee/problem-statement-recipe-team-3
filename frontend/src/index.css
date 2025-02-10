@@ -37,7 +37,6 @@ header a {
   margin: 0 auto;
 }
 
-
 /* homepage */
 .home {
   display: grid;
@@ -51,23 +50,20 @@ header a {
   margin: 20px auto;
   padding: 20px;
   position: relative;
-  /* Keeps it positioned relative to its normal position */
   box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.05);
   display: flex;
-  /* Use flexbox for layout */
   flex-direction: column;
-  /* Stack children vertically */
 }
 
 .recipe-image {
-  align-self: center; /* Center image within the container */
-  max-width: 100%; /* Ensure it doesn't overflow the recipe card */
-  margin-bottom: 10px; /* Space between the image and text */
+  align-self: center;
+  max-width: 100%;
+  margin-bottom: 10px;
 }
 
 .recipe-image img {
-  max-height: 300px; /* Limit image height */
-  width: auto; /* Maintain aspect ratio */
+  max-height: 300px;
+  width: auto;
 }
 
 .recipe-details h4 {
@@ -131,7 +127,6 @@ form button {
   margin-left: 20px; /* Specifically adds more space to the left of the Cancel button */
 }
 
-
 div.error {
   padding: 10px;
   background: #ffefef;
@@ -148,7 +143,6 @@ input.error {
 .action-icon:hover {
   color: #ff0000;
 }
-
 
 /* navbar */
 nav {
@@ -173,8 +167,7 @@ nav button {
 }
 
 /* auth forms */
-form.signup,
-form.login {
+form.signup, form.login {
   max-width: 400px;
   margin: 40px auto;
   padding: 20px;
@@ -193,7 +186,7 @@ form.login {
   font-family: "Nunito", sans-serif;
 }
 
-.log-meal h2 {
+.log-meal h2, .log-meal h3 {
   color: var(--primary);
   text-align: center;
 }
@@ -203,7 +196,7 @@ form.login {
   text-align: center;
 }
 
-.log-meal input[type="file"] {
+.log-meal input[type="file"], .log-meal button {
   border: 2px solid var(--primary);
   padding: 8px;
   margin-top: 10px;
@@ -211,36 +204,35 @@ form.login {
   display: block;
   width: calc(100% - 20px); /* Adjusts width to account for padding */
   cursor: pointer;
+  background: var(--primary);
+  color: white;
+  border-radius: 4px;
 }
 
 .log-meal button {
-  background: var(--primary);
-  color: #fff;
-  border: none;
   padding: 10px 20px;
-  border-radius: 4px;
-  cursor: pointer;
   font-size: 16px;
-  display: block;
   margin: 10px auto;
 }
 
-.error {
+.error, .loading {
   color: var(--error);
   background-color: #ffecec;
   border-left: 5px solid var(--error);
   padding: 10px;
   margin: 10px 0;
   border-radius: 4px;
+  text-align: center;
+  font-size: 16px;
 }
 
 .loading {
-  text-align: center;
-  font-size: 16px;
   color: var(--primary);
+  background-color: #f1f1f1;
+  border-color: var(--primary);
 }
 
-/* Styling for the nutritional information display */
+/* Styling Nutritional Information Display */
 .nutrition-info {
   margin-top: 20px;
   padding: 15px;
@@ -250,13 +242,11 @@ form.login {
 }
 
 .nutrition-info h3 {
-  color: var(--primary);
   margin-bottom: 10px;
 }
 
 .nutrition-info p, .nutrition-info li {
   font-size: 16px;
-  color: #666;
   line-height: 1.5;
 }
 
@@ -270,15 +260,7 @@ form.login {
 }
 
 /* Enhancements for file input to make it visually consistent */
-.log-meal input[type="file"]::-webkit-file-upload-button {
-  background: var(--primary);
-  color: white;
-  padding: 10px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
+.log-meal input[type="file"]::-webkit-file-upload-button, 
 .log-meal input[type="file"]::file-selector-button {
   background: var(--primary);
   color: white;
