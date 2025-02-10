@@ -1,149 +1,111 @@
 import React, { useState } from 'react';
 
-const NutritionalAnalysis = () => {
-    const [file, setFile] = useState(null);
-    const [result, setResult] = useState(null);
+const LogMeal = () => {
+    const [image, setImage] = useState(null);
+    const [results, setResults] = useState(null);
     const [loading, setLoading] = useState(false);
+    const [error, setError] = useState('');
+
+    const handleImageChange = (e) => {
+        setImage(e.target.files[0]);
+    };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        if (!file) return alert('Please select an image first.');
-
-        const apiUserToken = 'a81f334445d7ccec304c92d2bc07741c599fa6f8';
-        const headers = { 'Authorization': `Bearer ${apiUserToken}` };
-        const formData = new FormData();
-        formData.append('image', file);
-
+        if (!image) {
+            setError('Please select an image first.');
+            return;
+        }
         setLoading(true);
+        setError('');
+
+        const formData = new FormData();
+        formData.append('image', image);
+
         try {
-            // post the image for the segmentation to happen to figure out food composition
-            const segmentationResponse = await fetch(
-                'https://api.logmeal.com/v2/image/segmentation/complete',
-                { method: 'POST', body: formData, headers }
-            );
+            // Step 1: Detect food items using LogMeal API
+            const segmentationResponse = await fetch('https://api.logmeal.es/v2/image/segmentation/complete', {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${process.env.REACT_APP_LOGMEAL_API_KEY}`
+                },
+                body: formData
+            });
+
+            if (!segmentationResponse.ok) {
+                const errorDetail = await segmentationResponse.json();
+                console.error("Segmentation Error Detail:", errorDetail);
+                throw new Error(`Failed to segment image: ${errorDetail.message || 'No detailed error provided by API'}`);
+            }
+
             const segmentationData = await segmentationResponse.json();
-            console.log("Segmentation Response:", segmentationData);
+            console.log("Successful Segmentation Response:", segmentationData);
 
-            if (!segmentationData.imageId) throw new Error('Segmentation failed');
+            if (!segmentationData.imageId) {
+                throw new Error("No imageId returned, which is necessary for further processing.");
+            }
 
-            // send the image back to the API so that the nutritional value can be sent.
-            const nutritionResponse = await fetch(
-                'https://api.logmeal.com/v2/recipe/nutritionalInfo',
-                {
-                    method: 'POST',
-                    headers: { ...headers, 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ imageId: segmentationData.imageId }),
-                }
-            );
+            // Step 2: Fetch nutritional information using the imageId
+            const nutritionResponse = await fetch('https://api.logmeal.es/v2/recipe/nutritionalInfo', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${process.env.REACT_APP_LOGMEAL_API_KEY}`
+                },
+                body: JSON.stringify({ imageId: segmentationData.imageId })
+            });
+
+            if (!nutritionResponse.ok) {
+                const nutritionErrorDetail = await nutritionResponse.json();
+                console.error("Nutrition Info Error Detail:", nutritionErrorDetail);
+                throw new Error(`Failed to retrieve nutritional information: ${nutritionErrorDetail.message || 'No detailed error provided by API'}`);
+            }
+
             const nutritionData = await nutritionResponse.json();
-            console.log("Nutritional Response:", nutritionData);
+            console.log("Nutritional Info Response:", nutritionData);
 
-            setResult(nutritionData);
+            // Combine food recognition and nutritional info
+            setResults({
+                recognition: segmentationData,
+                nutrition: nutritionData
+            });
+
         } catch (error) {
-            console.error('Error:', error);
-            setResult({ error: error.message });
+            console.error('Error processing image:', error);
+            setError(error.message);
         } finally {
             setLoading(false);
         }
     };
 
-    // added the key nutrients that i want the value off based on the json
-    const keyNutrients = {
-        CHOCDF: "Carbs",
-        PROCNT: "Protein",
-        FAT: "Fat",
-        FASAT: "Saturated fats",
-        FATRN: "Trans fats",
-        SUGAR: "Sugars",
-        NA: "Sodium",   
-        CHOLE: "Cholesterol"
-    };
-
     return (
-        <div className="pages">
-            <form onSubmit={handleSubmit} className="signup">
-                <h3>Upload a Photo to have a Nutritional Analysis:</h3>
-                <h5>After taking a photo, it will load and the details of the nutritional value would be listed below.</h5>
-                <button type="submit" disabled={loading}>
-                    {loading ? 'Uploading...' : 'Upload'}
-                </button>
-                <p>Please upload the picture below</p>
-                <input
-                    type="file"
-                    accept="image/*"
-                    onChange={(e) => setFile(e.target.files[0])}
-                />
+        <div className="log-meal">
+            <h2>Log Meal</h2>
+            <p>Upload a picture of food, and see detailed nutritional information.</p>
+
+            {error && <div className="error">{error}</div>}
+            {loading && <div>Loading...</div>}
+
+            <form onSubmit={handleSubmit}>
+                <input type="file" onChange={handleImageChange} accept="image/*" />
+                <button type="submit">Analyze Meal</button>
             </form>
 
-            {result && (
-                <div className="recipes">
-                    <h4>Information based on Nutritional Value of the Food:</h4>
-                    {result.error ? (
-                        <p className="error">{result.error}</p>
-                    ) : result.nutritional_info ? (
-                        <>
-                            <p><strong>Total Calories:</strong> {result.nutritional_info?.calories?.toFixed(2)} kcal</p>
-                            <ul>
-                                {Object.entries(keyNutrients).map(([key, label]) => {
-                                    const nutrients = result.nutritional_info?.totalNutrients;
-                                    const nutrientValue = nutrients?.[key]?.quantity;
-
-                                    return nutrientValue !== undefined ? (
-                                        <li key={key}>
-                                            <strong>{label}:</strong> {nutrientValue.toFixed(2)} {nutrients[key].unit}
-                                        </li>
-                                    ) : (
-                                        <li key={key}><strong>{label}:</strong> N/A</li>
-                                    );
-                                })}
-                            </ul>
-                        </>
-                    ) : (
-                        <p className="error">There is no nutritional data available for this image. Please try again!</p>
+            {results && (
+                <div>
+                    <h3>Segmentation Data:</h3>
+                    <pre>{JSON.stringify(results.recognition, null, 2)}</pre>
+                    <h3>Nutritional Information:</h3>
+                    {results.nutrition && (
+                        <div>
+                            <p><strong>Calories:</strong> {results.nutrition.nutritional_info.calories.toFixed(2)} kcal</p>
+                            <p><strong>Serving Size:</strong> {results.nutrition.serving_size}g</p>
+                        </div>
                     )}
                 </div>
             )}
-
-
-<style jsx>{`
-
-                .pages {
-                    display: flex;
-                    justify-content: center; 
-                    align-items: center;    
-                    width: 100%;            
-                }
-
-                .recipes {
-                    background-color: #a29dff;
-                    padding: 20px;
-                    border-radius: 20px;
-                    display: flex;
-                    flex-direction: column;
-                    align-items: center;  
-                    justify-content: center; 
-                    text-align: center;
-                    width: 700px;
-                    height: 500px;
-                }
-
-                .recipes h4 {
-                    font-size: 24px;
-                    color:rgb(0, 0, 0);
-                }
-
-                .recipes p {
-                    font-size: 20px;
-                    margin-bottom: 10px;
-                }
-                    
-                .recipes li {
-                    font-size: 18px;
-                    margin-bottom: 8px;
-                }
-            `}</style>
         </div>
     );
 };
 
-export default NutritionalAnalysis;
+export default LogMeal;
